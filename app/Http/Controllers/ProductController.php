@@ -2,99 +2,75 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Mockery\Undefined;
-use Illuminate\Http\RedirectResponse;
-
 
 class ProductController extends Controller
-
 {
-
-    public static $products = [
-
-        ["id" => "1", "name" => "TV", "description" => "Best TV", "price" => 90],
-
-        ["id" => "2", "name" => "iPhone", "description" => "Best iPhone", "price" => 2000],
-
-        ["id" => "3", "name" => "Chromecast", "description" => "Best Chromecast", "price" => 3000],
-
-        ["id" => "4", "name" => "Glasses", "description" => "Best Glasses", "price" => 4000],
-
-    ];
-
-
     public function index(): View
-
     {
 
         $viewData = [];
 
-        $viewData["title"] = "Products - Online Store";
+        $viewData['title'] = 'Products - Online Store';
 
-        $viewData["subtitle"] = "List of products";
+        $viewData['subtitle'] = 'List of products';
 
-        $viewData["products"] = ProductController::$products;
+        $viewData['products'] = Product::all();
 
-        return view('product.index')->with("viewData", $viewData);
+        return view('product.index')->with('viewData', $viewData);
     }
-
 
     public function show(string $id): View|RedirectResponse
-
     {
-        if (!isset(ProductController::$products[$id - 1]) || ! ProductController::$products) {
-            return redirect()->route('home.index');
-        }
+        // if (!isset(ProductController::$products[$id - 1]) || ! ProductController::$products) {
+        //     return redirect()->route('home.index');
+        // }
 
         $viewData = [];
-        $product = ProductController::$products[$id - 1];
+        $product = Product::findOrFail($id);
 
-        $viewData["title"] = $product["name"] . " - Online Store";
+        $viewData['title'] = $product['name'].' - Online Store';
 
-        $viewData["subtitle"] = $product["name"] . " - Product information";
+        $viewData['subtitle'] = $product['name'].' - Product information';
 
-        $viewData["product"] = $product;
+        $viewData['product'] = $product;
 
-        $viewData["price"] = $product["price"];
+        $viewData['price'] = $product['price'];
 
-        return view('product.show')->with("viewData", $viewData);
+        return view('product.show')->with('viewData', $viewData);
     }
-    public function create(): View
 
+    public function create(): View
     {
 
-        $viewData = []; //to be sent to the view
+        $viewData = []; // to be sent to the view
 
-        $viewData["title"] = "Create product";
+        $viewData['title'] = 'Create product';
 
-
-        return view('product.create')->with("viewData", $viewData);
+        return view('product.create')->with('viewData', $viewData);
     }
 
-
-    public function save(Request $request):RedirectResponse
-
+    public function save(Request $request): RedirectResponse
     {
 
         $request->validate([
 
-            "name" => "required",
+            'name' => 'required',
 
-            "price" => "required",
+            'price' => 'required',
 
         ]);
+        // return redirect()->route('product.validation');
 
-        // dd($request->all());
-        return redirect()->route('product.validation');
+        Product::create($request->only(['name', 'price']));
 
-        //here will be the code to call the model and save it to the database
-
+        return back();
     }
 
     public function validation(): View
-
     {
         return view('product.validation');
     }
