@@ -17,7 +17,6 @@
                 @foreach($viewData["product"]->comments as $comment)
                 - {{ $comment->getDescription() }}<br />
                 @endforeach
-
             </div>
         </div>
     </div>
