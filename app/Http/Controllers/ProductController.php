@@ -15,7 +15,7 @@ class ProductController extends Controller
         $viewData['title'] = 'Products - Online Store';
         $viewData['subtitle'] = 'List of products';
         $viewData['products'] = Product::all();
-
+        
         return view('product.index')->with('viewData', $viewData);
     }
 
