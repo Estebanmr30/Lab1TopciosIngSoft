@@ -8,7 +8,7 @@ class CartController extends Controller
 {
     public function index(Request $request): View
     {
-        $products = []; //this simulates the database
+        $products = []; 
         $products[121] = ['name' => 'Tv samsung', 'price' => '1000'];
         $products[11] = ['name' => 'Iphone', 'price' => '2000'];
         $cartProducts = [];
